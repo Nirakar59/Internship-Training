@@ -3,7 +3,7 @@ import { TodosContext } from '../Context/Todo'
 
 const TodoList = () => {
     const TodoContext = useContext(TodosContext)
-    console.log("---", TodoContext?.todos)
+    // console.log("---", TodoContext?.todos)
     function HandleRemoveOnClick(thingsToDelete: string) {
         TodoContext?.HandleRemoveTodo(thingsToDelete)
     }
@@ -12,7 +12,7 @@ const TodoList = () => {
             TodoList</h1>
             <div>
                 {TodoContext?.todos?.map((todo, idx) => (
-                    <div key={idx} onClick={() => HandleRemoveOnClick(todo)}>
+                    <div key={idx} onClick={() => HandleRemoveOnClick(todo)} className=''>
                         {todo}
                     </div>
                 ))}</div>        </div>
