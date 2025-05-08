@@ -1,9 +1,14 @@
 // import React from 'react'
 
+import { use } from "react"
+import { LogInContext } from "../Context/AuthContext"
+
 const DashBoard = () => {
+  const{user} = use(LogInContext)
   return (
     <>
-    <h1>Welcome user</h1>
+    <title>Dashboard</title>
+    <h1>Welcome {user?.user }</h1>
     </>
   )
 }

@@ -1,10 +1,12 @@
-// import React from 'react';
-import { NavLink, Link } from 'react-router';
+import { use } from 'react';
+import { Link, NavLink } from 'react-router';
+import { LogInContext } from '../Context/AuthContext';
 
-const Header = () => {
+const HeaderFile = () => {
+  const { handleLogout, isLoggedIn,user } = use(LogInContext);
   return (
-    <nav className="bg-white shadow-md px-6 py-4 flex justify-between items-center ">
-      {/* Left Section */}
+    <nav className="bg-white shadow-md px-6 py-4 flex justify-between items-center">
+      {/* Left Section - Logo */}
       <div className="text-2xl font-bold text-gray-800">
         Fake Store
       </div>
@@ -16,7 +18,7 @@ const Header = () => {
           className={({ isActive }) =>
             isActive
               ? 'text-blue-600 font-semibold border-b-2 border-blue-600 pb-1'
-              : 'text-gray-700 hover:text-blue-600'
+              : 'text-gray-700 hover:text-blue-600 transition'
           }
         >
           Home
@@ -26,34 +28,48 @@ const Header = () => {
           className={({ isActive }) =>
             isActive
               ? 'text-blue-600 font-semibold border-b-2 border-blue-600 pb-1'
-              : 'text-gray-700 hover:text-blue-600'
+              : 'text-gray-700 hover:text-blue-600 transition'
           }
         >
           Products
         </NavLink>
       </div>
 
-      {/* Right Section - Auth Buttons */}
-      <div className="space-x-4">
-        <Link to="/login">
-          <button className="px-4 py-2 border border-blue-600 text-blue-600 rounded hover:bg-blue-50 transition">
-            Log In
+      {/* Right Section - Auth & Cart */}
+      <div className="flex items-center space-x-4">
+        {!isLoggedIn ? (
+          <>
+            <Link to="/login">
+              <button className="px-4 py-2 border border-blue-600 text-blue-600 rounded hover:bg-blue-50 transition">
+                Log In
+              </button>
+            </Link>
+            <Link to="/createUser">
+              <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                Sign Up
+              </button>
+            </Link>
+          </>
+        ) : (
+          <>
+          <span>Welcome {user?.user}</span>
+          <button
+            onClick={handleLogout}
+            className="px-4 py-2 border border-blue-600 text-blue-600 rounded hover:bg-blue-50 transition"
+            >
+            Log Out
           </button>
-        </Link>
-        <Link to="/createUser">
-          <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
-            Sign Up
-          </button>
-        </Link>
-        <Link to="/cart">
+            </>
+        )}
+
+        <Link to={isLoggedIn ? '/cart' : '/login'}>
           <button className="px-4 py-2 bg-yellow-500 text-white font-semibold rounded-lg shadow hover:bg-yellow-600 transition">
             Cart
           </button>
         </Link>
-
       </div>
     </nav>
   );
 };
 
-export default Header;
+export default HeaderFile;

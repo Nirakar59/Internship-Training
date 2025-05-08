@@ -1,11 +1,16 @@
-import React from 'react';
-import { Link } from 'react-router';
+import React, { use } from 'react';
+import { Link, Navigate, useNavigate } from 'react-router';
+import { LogInContext } from '../Context/AuthContext';
+// import { Navigate } from 'react-router';
+// import { useNavigate } from 'react-router';
 
 type TypeOfToken = {
   token: string;
 };
-
 const Auth: React.FC = () => {
+  const {handleLogin,isLoggedIn}=use(LogInContext)
+  const navigate = useNavigate()
+  if(isLoggedIn) <Navigate to="/dashboard" replace/>
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -24,6 +29,9 @@ const Auth: React.FC = () => {
       if (response.ok) {
         const data: TypeOfToken = await response.json();
         console.log('Token:', data.token);
+        // localStorage.setItem('auth',authToken)
+        handleLogin(data.token)
+        navigate('/dashboard')
       }
     } catch (err) {
       console.error('Login error:', err);
@@ -31,6 +39,8 @@ const Auth: React.FC = () => {
   };
 
   return (
+    <>
+    <title>Log in</title>
     <main className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
       <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-md">
         <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">Login</h1>
@@ -45,7 +55,7 @@ const Auth: React.FC = () => {
               id="usernameInp"
               required
               className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-            />
+              />
           </div>
 
           <div>
@@ -58,13 +68,13 @@ const Auth: React.FC = () => {
               id="passInp"
               required
               className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-            />
+              />
           </div>
 
           <button
             type="submit"
             className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
-          >
+            >
             Login
           </button>
         </form>
@@ -77,6 +87,7 @@ const Auth: React.FC = () => {
         </p>
       </div>
     </main>
+            </>
   );
 };
 
