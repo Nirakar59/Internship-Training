@@ -2,6 +2,7 @@ import { use, useCallback, useEffect, useState } from 'react'
 import { LogInContext } from '../Context/AuthContext'
 // import { Navigate } from 'react-router'
 import { useNavigate } from 'react-router'
+import { CartContext } from '../Context/CartContext'
 
 // import { data } from 'react-router'
 export type TypeProduct = {
@@ -23,8 +24,7 @@ const Products = () => {
   const navigate = useNavigate()
   const { isLoggedIn } = use(LogInContext)
   const [products, setProducts] = useState<TypeProduct[]>([])
-
-
+  const { addToCart } = use(CartContext)
   const getProducts = useCallback(async () => {
     try {
       const response = await fetch('https://fakestoreapi.com/products')
@@ -46,9 +46,21 @@ const Products = () => {
     getProducts()
   }, [getProducts])
 
+  const handleAddToCart = (prod: TypeProduct) => {
+
+    if (!isLoggedIn) {
+      navigate('/login');
+    }
+    addToCart({
+      count: 1,
+      id: String(new Date().getTime()),
+      product: [prod]
+    })
+
+  }
   return (
     <>
-    <title>Products</title>
+      <title>Products</title>
       <main className="bg-gray-100 py-10 px-4 min-h-screen">
         <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">All Products</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
@@ -71,11 +83,7 @@ const Products = () => {
                   <span>⭐ {product.rating.rate}</span>
                   <span>{product.rating.count} reviews</span>
                 </div>
-                <button onClick={() => {
-                  if (!isLoggedIn) {
-                    navigate('/login');
-                  }
-                }} className="mt-4 w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition font-semibold">
+                <button onClick={() => handleAddToCart(product)} className="mt-4 w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition font-semibold">
                   Add to Cart
                 </button>
                 <button onClick={() => {

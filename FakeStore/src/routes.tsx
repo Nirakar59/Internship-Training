@@ -7,6 +7,7 @@ import Landing from "./Components/Landing";
 import Cart from "./Pages/Cart";
 import DashBoard from "./Components/DashBoard";
 import AuthContextProvider from "./Context/AuthContext";
+import { CartProvider } from "./Context/CartContext";
 
 const router = createBrowserRouter(
     [
@@ -14,7 +15,9 @@ const router = createBrowserRouter(
             path: "/",
             element:
                 <AuthContextProvider>
+                    <CartProvider>
                     <Outlet />
+                    </CartProvider>
                 </AuthContextProvider>
             , children: [
 

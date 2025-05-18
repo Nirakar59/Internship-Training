@@ -1,9 +1,12 @@
 import { use } from 'react';
 import { Link, NavLink } from 'react-router';
 import { LogInContext } from '../Context/AuthContext';
+import { CartContext } from '../Context/CartContext';
 
 const HeaderFile = () => {
   const { handleLogout, isLoggedIn,user } = use(LogInContext);
+    const{cart:{productCount}} = use(CartContext)
+  
   return (
     <nav className="bg-white shadow-md px-6 py-4 flex justify-between items-center">
       {/* Left Section - Logo */}
@@ -62,10 +65,11 @@ const HeaderFile = () => {
             </>
         )}
 
-        <Link to={isLoggedIn ? '/cart' : '/login'}>
+        <Link className='relative' to={isLoggedIn ? '/cart' : '/login'}>
           <button className="px-4 py-2 bg-yellow-500 text-white font-semibold rounded-lg shadow hover:bg-yellow-600 transition">
             Cart
           </button>
+          <span className='absolute -top-2 -right-3 rounded-full grid place-content-center bg-gray-700 text-white size-6'>{productCount}</span>
         </Link>
       </div>
     </nav>

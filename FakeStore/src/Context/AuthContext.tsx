@@ -37,10 +37,10 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
             setUser(decodedUser);
         }
     }
-    const handleLogout = (navTO = false) => {
+    const handleLogout = () => {
         localStorage.removeItem(AUTH_TOKEN_KEY_FOR_LOCALSTORAGE)
         setIsLoggedIn(false)
-        if (navTO) navigate("/login")
+          navigate("/")
     }
 
     useEffect(() => {
